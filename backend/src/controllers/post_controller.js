@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Post from "../schemas/post_db.js";
 import Comment from "../schemas/comment_db.js";
 import User from "../schemas/user_db.js";
+import { createAlarmHelper } from "./alarm_controller.js";
 
 const { Types } = mongoose;
 
@@ -349,6 +350,16 @@ export const togglePostLike = async (req, res, next) => {
     }
 
     await post.save();
+
+    // 게시글 좋아요 토글 시, 좋아요가 새로 추가되었을 때만 게시글 작성자에게 알림 생성
+    if (!alreadyLiked) {
+      await createAlarmHelper({
+        receiverRef: post.userRef,
+        senderRef: req.user._id,
+        type: "like_post",
+        postRef: post._id,
+      });
+    }
 
     return res.status(200).json({
       id: post._id.toString(),
