@@ -137,10 +137,10 @@ export const getPosts = async (req, res, next) => {
     }
 
     if (keyword) {
-      filter.title = {
-        $regex: escapeRegExp(keyword),
-        $options: "i",
-      };
+      filter.$or = [
+        { title: { $regex: escapeRegExp(keyword), $options: "i" } },
+        { content: { $regex: escapeRegExp(keyword), $options: "i" } },
+      ];
     }
 
     const posts = await Post.find(filter).populate("userRef", "name").lean();

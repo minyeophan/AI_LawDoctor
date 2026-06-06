@@ -2,7 +2,8 @@ import DocumentMeta from '../shared/DocumentMeta';
 import { RiskItem } from '../../../api/analyze';
 import { mockDocumentContent } from '../../../mock/mockData';
 import { useState, useMemo } from 'react';
-import { MdError } from "react-icons/md";
+import { MdError, MdWarning} from "react-icons/md";
+
 import "./DangerView.css"
 
 const normalizeRiskLevel = (level?: string): 'high' | 'medium' | 'low' => {
@@ -11,6 +12,10 @@ const normalizeRiskLevel = (level?: string): 'high' | 'medium' | 'low' => {
   if (normalized === 'medium') return 'medium';
   return 'low';
 };
+
+// 공백/줄바꿈 정규화 — 매칭 비교용
+const normalizeText = (text: string) =>
+  text.replace(/\s+/g, ' ').replace(/\u00A0/g, ' ').trim();
 
 interface DangerViewProps {
   currentDocument: {
@@ -34,13 +39,18 @@ function DangerView({
   editedHtml = '',
 }: DangerViewProps) {
 
+  // ── 블록 생성: 표는 그대로, 텍스트는 문단 단위로 ──
   const blocks = useMemo(() => {
-    const result: { type: 'table' | 'text'; content: string }[] = [];
+    const result: { type: 'table' | 'text'; content: string; rawText: string }[] = [];
     const html = editedHtml || '';
 
     if (!html) {
       const content = currentDocument.content || mockDocumentContent;
-      content.split('\n').forEach(line => result.push({ type: 'text', content: line }));
+      // 문단 단위로 분리
+      content.split(/\n{2,}/).forEach(para => {
+        const trimmed = para.trim();
+        if (trimmed) result.push({ type: 'text', content: para, rawText: normalizeText(trimmed) });
+      });
       return result;
     }
 
@@ -49,114 +59,138 @@ function DangerView({
     let match;
 
     while ((match = tableRegex.exec(html)) !== null) {
+      // 표 앞 텍스트 — 문단 단위로 분리
       if (match.index > lastIndex) {
         const div = document.createElement('div');
         div.innerHTML = html.slice(lastIndex, match.index);
-        const text = div.innerText || div.textContent || '';
-        text.split('\n').forEach(line => result.push({ type: 'text', content: line }));
+        // p 태그 기준으로 문단 분리
+        const paragraphs = div.querySelectorAll('p');
+        if (paragraphs.length > 0) {
+          paragraphs.forEach(p => {
+            const text = (p.innerText || p.textContent || '').trim();
+            if (text) result.push({ type: 'text', content: text, rawText: normalizeText(text) });
+          });
+        } else {
+          // p 태그 없으면 전체 텍스트를 빈 줄 기준으로 분리
+          const fullText = div.innerText || div.textContent || '';
+          fullText.split(/\n{2,}/).forEach(para => {
+            const trimmed = para.trim();
+            if (trimmed) result.push({ type: 'text', content: trimmed, rawText: normalizeText(trimmed) });
+          });
+        }
       }
 
+      // 표 처리
       const tableDiv = document.createElement('div');
       tableDiv.innerHTML = match[0];
       const tdCount = tableDiv.querySelectorAll('td').length;
+      const tableText = normalizeText(tableDiv.innerText || tableDiv.textContent || '');
 
       if (tdCount <= 1) {
         const tdEl = tableDiv.querySelector('td');
         if (tdEl) {
-          tdEl.querySelectorAll('p, br').forEach(el => {
-            if (el.tagName === 'BR') {
-              el.replaceWith('\n');
-            } else {
-              el.insertAdjacentText('afterend', '\n');
-            }
-          });
           const text = (tdEl.innerText || tdEl.textContent || '').trim();
-          text.split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0)
-            .forEach(line => result.push({ type: 'text', content: line }));
+          if (text) result.push({ type: 'text', content: text, rawText: normalizeText(text) });
         }
       } else {
-        result.push({ type: 'table', content: match[0] });
+        result.push({ type: 'table', content: match[0], rawText: tableText });
       }
 
       lastIndex = match.index + match[0].length;
     }
 
+    // 나머지 텍스트
     if (lastIndex < html.length) {
       const div = document.createElement('div');
       div.innerHTML = html.slice(lastIndex);
-      const text = div.innerText || div.textContent || '';
-      text.split('\n').forEach(line => result.push({ type: 'text', content: line }));
+      const paragraphs = div.querySelectorAll('p');
+      if (paragraphs.length > 0) {
+        paragraphs.forEach(p => {
+          const text = (p.innerText || p.textContent || '').trim();
+          if (text) result.push({ type: 'text', content: text, rawText: normalizeText(text) });
+        });
+      } else {
+        const fullText = div.innerText || div.textContent || '';
+        fullText.split(/\n{2,}/).forEach(para => {
+          const trimmed = para.trim();
+          if (trimmed) result.push({ type: 'text', content: trimmed, rawText: normalizeText(trimmed) });
+        });
+      }
     }
 
     return result;
   }, [editedHtml, currentDocument.content]);
 
-  const riskFirstAppearance = useMemo(() => {
-    const appearances = new Map<number, number>();
+  // ── 매칭: 정규화된 텍스트로 비교 ──
+ const riskFirstAppearance = useMemo(() => {
+  const appearances = new Map<number, number>();
+  const blockMatchCount = new Map<number, number>(); // 블록당 매칭 수 제한
 
-    riskData.forEach((risk: RiskItem, riskIdx: number) => {
-      const getMatchScore = (text: string, risk: RiskItem): number => {
-        const t = text.trim();
-        if (t.length < 5) return 0;
-        const clauseText = risk.clauseText?.trim() ?? '';
-        if (!clauseText) return 0;
-        if (t.includes(clauseText)) return 90;
-        const firstSentence = clauseText.split(/[,.。]/)[0].trim();
-        if (firstSentence.length > 5 && t.includes(firstSentence)) return 70;
-        if (clauseText.includes(t) && t.length > 10) return 50;
-        const words = clauseText.split(' ').filter(w => w.length > 3);
+  riskData.forEach((risk: RiskItem, riskIdx: number) => {
+    const clauseRaw = normalizeText(risk.clauseText?.trim() ?? '');
+    if (!clauseRaw) return;
+
+    const getMatchScore = (blockRawText: string): number => {
+      const t = blockRawText;
+      if (t.length < 5) return 0;
+      if (t.includes(clauseRaw)) return 100;
+      if (clauseRaw.includes(t) && t.length > 15) return 85;
+      const firstSentence = normalizeText(clauseRaw.split(/[,.。\n]/)[0]);
+      if (firstSentence.length > 8 && t.includes(firstSentence)) return 75;
+      const articleMatch = clauseRaw.match(/^(제\d+조|①|②|③|④|⑤|\d+\.)/);
+      if (articleMatch && t.includes(articleMatch[0])) {
+        const words = clauseRaw.split(' ').filter(w => w.length > 3);
         if (words.length === 0) return 0;
         const matchCount = words.filter(w => t.includes(w)).length;
         const ratio = matchCount / words.length;
-        return ratio >= 0.5 ? ratio * 40 : 0;
-      };
+        if (ratio >= 0.4) return 60 + ratio * 20;
+      }
+      const words = clauseRaw.split(' ').filter(w => w.length > 3);
+      if (words.length === 0) return 0;
+      const matchCount = words.filter(w => t.includes(w)).length;
+      const ratio = matchCount / words.length;
+      return ratio >= 0.5 ? ratio * 50 : 0;
+    };
 
-      let bestScore = 0;
-      let bestBlockIndex = -1;
+    let bestScore = 0;
+    let bestBlockIndex = -1;
 
-      blocks.forEach((block, blockIndex) => {
-        const text = block.type === 'table'
-          ? (() => {
-              const d = document.createElement('div');
-              d.innerHTML = block.content;
-              return (d.innerText || d.textContent || '').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-            })()
-          : block.content;
-
-        const score = getMatchScore(text, risk);
-        if (score > bestScore) {
-          bestScore = score;
-          bestBlockIndex = blockIndex;
-        }
-      });
-
-      if (bestBlockIndex >= 0 && bestScore >= 30) {
-        appearances.set(riskIdx, bestBlockIndex);
+    blocks.forEach((block, blockIndex) => {
+      // 한 블록에 최대 2개까지만 매칭 허용
+      if ((blockMatchCount.get(blockIndex) ?? 0) >= 2) return;
+      const score = getMatchScore(block.rawText);
+      // 점수가 낮은 경우 큰 블록(특약사항 등)에 매칭 방지
+      if (score < 70 && block.rawText.length > 200) return;
+      if (score > bestScore) {
+        bestScore = score;
+        bestBlockIndex = blockIndex;
       }
     });
 
-    return appearances;
-  }, [blocks, riskData]);
+    if (bestBlockIndex < 0 || bestScore < 25) {
+      const fallbackIndex = Math.floor((riskIdx / riskData.length) * blocks.length);
+      appearances.set(riskIdx, Math.min(fallbackIndex, blocks.length - 1));
+    } else {
+      appearances.set(riskIdx, bestBlockIndex);
+      blockMatchCount.set(bestBlockIndex, (blockMatchCount.get(bestBlockIndex) ?? 0) + 1);
+    }
+  });
 
-  const riskPositions = useMemo(() => {
-    return riskData.map((risk: RiskItem, index: number) => {
+  return appearances;
+}, [blocks, riskData]);
+ const riskPositions = useMemo(() => {
+  return riskData
+    .map((risk: RiskItem, index: number) => {
       const blockIndex = riskFirstAppearance.get(index);
-      if (blockIndex !== undefined) {
-        return {
-          ...risk,
-          position: Math.min((blockIndex / blocks.length) * 100, 97),
-          index,
-        };
-      }
+      if (blockIndex === undefined) return null; // 매칭 실패 제외
       return {
         ...risk,
-        position: (index / riskData.length) * 100,
+        position: Math.min((blockIndex / blocks.length) * 100, 97),
         index,
       };
-    });
-  }, [riskData, riskFirstAppearance, blocks.length]);
+    })
+    .filter(Boolean) as any[];
+}, [riskData, riskFirstAppearance, blocks.length]);
 
   const adjustedPositions = useMemo(() => {
     const MIN_GAP = 3;
@@ -192,7 +226,7 @@ function DangerView({
                 onMouseLeave={() => setIsGuideOpen(false)}
               />
             </span>
-            <p>{riskData.length}개의 위험 포인트를 찾았어요</p>
+            <p>{riskFirstAppearance.size}개의 위험 포인트를 찾았어요</p>
             {isGuideOpen && (
               <div className="risk-guide-content">
                 <div className="risk-level-guide">
@@ -315,10 +349,11 @@ function DangerView({
                 );
               }
 
+              // 텍스트 블록
               const line = block.content;
               const trimmedLine = line.trim();
 
-              if (trimmedLine.length < 10) {
+              if (trimmedLine.length < 5) {
                 return <p key={blockIndex} className="document-line">{line || '\u00A0'}</p>;
               }
 
@@ -352,7 +387,7 @@ function DangerView({
                     const level = normalizeRiskLevel(risk.riskLevel);
                     return (
                       <div id={`reason-box-${riskIdx}`} key={riskIdx} className={`reason-box severity-${level}`}>
-                        <p className="reason">⚠️ {risk.reason || risk.description}</p>
+                        <p className="reason"><MdWarning className="warning-icon" /> {risk.reason || risk.description}</p>
                       </div>
                     );
                   })}

@@ -5,10 +5,10 @@ import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { forwardRef, useImperativeHandle, useEffect } from 'react';
-import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { SearchQuery, findNext } from 'prosemirror-search';
+import { Extension, Mark, mergeAttributes } from '@tiptap/core';
 import './DocumentEditor.css';
 
 export interface DocumentEditorRef {
@@ -23,6 +23,16 @@ interface Props {
 
 // 검색 하이라이팅 Extension
 const searchPluginKey = new PluginKey('search');
+
+const MaskedText = Mark.create({
+  name: 'maskedText',
+  parseHTML() {
+    return [{ tag: 'span.masked-text' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['span', mergeAttributes(HTMLAttributes, { class: 'masked-text' }), 0];
+  },
+});
 
 const createSearchExtension = (searchTerm: string) =>
   Extension.create({
@@ -73,6 +83,7 @@ const DocumentEditor = forwardRef<DocumentEditorRef, Props>(
     const editor = useEditor({
       extensions: [
         StarterKit,
+        MaskedText,
         Table.configure({ resizable: false }),
         TableRow,
         TableHeader,

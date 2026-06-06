@@ -50,17 +50,17 @@ function AnalysisPage() {
   
 
 const maskPersonalInfo = (html: string): { masked: string; detected: boolean; counts: Record<string, number> } => {
-  const patterns = [
-    { regex: /\d{6}-\d{7}/g, replace: '******-*******', label: '주민번호' },
-    { regex: /01[0-9]-\d{3,4}-\d{4}/g, replace: '010-****-****', label: '전화번호' },
-    { regex: /\d{3,4}-\d{3,4}-\d{4,6}/g, replace: '****-****-****', label: '계좌번호' },
-    { regex: /\d{3}-\d{2}-\d{5}/g, replace: '***-**-*****', label: '사업자번호' },
-    { 
-      regex: /(서울|부산|대구|인천|광주|대전|울산|세종|경기도|강원도|충청북도|충청남도|전라북도|전라남도|경상북도|경상남도|제주도|충북|충남|전북|전남|경북|경남|제주)[^\s<]{2,80}(로|길|동|읍|면|리)(\s*\d+(-\d+)?(\s*\S+빌라|\s*\S+아파트|\s*\S+빌딩|\s*\d+호)?)?/g,
-      replace: '***',
-      label: '주소'
-    },
-  ];
+const patterns = [
+  { regex: /\d{6}-\d{7}/g, replace: '<span class="masked-text">******-*******</span>', label: '주민번호' },
+  { regex: /01[0-9]-\d{3,4}-\d{4}/g, replace: '<span class="masked-text">010-****-****</span>', label: '전화번호' },
+  { regex: /\d{3,4}-\d{3,4}-\d{4,6}/g, replace: '<span class="masked-text">****-****-****</span>', label: '계좌번호' },
+  { regex: /\d{3}-\d{2}-\d{5}/g, replace: '<span class="masked-text">***-**-*****</span>', label: '사업자번호' },
+  {
+    regex: /(서울|부산|대구|인천|광주|대전|울산|세종|경기도|강원도|충청북도|충청남도|전라북도|전라남도|경상북도|경상남도|제주도|충북|충남|전북|전남|경북|경남|제주)[^\s<]{2,80}(로|길|동|읍|면|리)(\s*\d+(-\d+)?(\s*\S+빌라|\s*\S+아파트|\s*\S+빌딩|\s*\d+호)?)?/g,
+    replace: '<span class="masked-text">***</span>',
+    label: '주소'
+  },
+];
   let result = html;
   let detected = false;
   const counts: Record<string, number> = {};

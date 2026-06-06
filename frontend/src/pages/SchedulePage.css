@@ -760,3 +760,59 @@
   margin: 0;
   line-height: 1.6;
 }
+
+@media (min-width: 1600px) {
+  .schedule-layout {
+    padding: 16px;
+    gap: 0px;
+  }
+
+  .schedule-left {
+    width: 360px;
+    height: calc(100vh - 90px);
+    padding: 20px;
+  }
+
+  .react-calendar__navigation__label {
+    font-size: 18px !important;
+  }
+
+  .react-calendar__tile {
+    font-size: 15px !important;
+  }
+
+  .schedule-right {
+    padding: 24px 24px;
+  }
+
+  .schedule-page-title {
+    font-size: 26px;
+    margin-bottom: 28px;
+  }
+
+  .schedule-card {
+    padding: 10px 20px;
+    gap: 30px;
+  }
+
+  .schedule-card-title-inline {
+    font-size: 14px;
+  }
+
+  .schedule-dday-text {
+    font-size: 14px;
+    min-width: 56px;
+  }
+
+  .calendar-month-title {
+    font-size: 14px;
+  }
+
+  .calendar-month-item-title {
+    font-size: 14px;
+  }
+
+  .controls-area {
+    gap: 12px;
+  }
+}
