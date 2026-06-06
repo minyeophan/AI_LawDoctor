@@ -278,3 +278,25 @@
     min-width: calc(33.333% - 6px);
   }
 }
+
+@media (min-width: 1600px) {
+  .documents-header h1 {
+    font-size: 26px;
+  }
+  .tab-btn {
+    font-size: 16px;
+    padding: 12px 40px;
+    min-width: 140px;
+  }
+  .search-box input {
+    font-size: 15px;
+  }
+  .filter-select {
+    font-size: 15px;
+    padding: 12px 18px;
+  }
+  .btn-create {
+    font-size: 15px;
+    padding: 12px 28px;
+  }
+}

@@ -68,3 +68,15 @@
     max-width: 350px;
   }
 }
+
+@media (min-width: 1600px) {
+  .right-sidebar {
+    width: 400px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .right-sidebar {
+    width: 440px;
+  }
+}

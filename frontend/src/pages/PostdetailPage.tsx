@@ -147,12 +147,6 @@ const handleCommentDislike = (commentId: string) => {
   return (
     <div className="post-detail-wrapper">
       <div className="post-detail-container">
-        <button className="back-btn" onClick={() => navigate('/community')}>
-          <span className='back-btn-icon'>
-            <IoChevronBackCircle size={'20px'} />
-          </span>
-          목록으로
-        </button>
 
         {/* 본문 */}
         <div className="post-detail-card">

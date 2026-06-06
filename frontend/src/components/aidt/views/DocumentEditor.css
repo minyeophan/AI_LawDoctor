@@ -39,3 +39,10 @@
 .document-editor-content .ProseMirror p {
   margin: 6px 0;
 }
+.masked-text {
+  background-color: #fef08a;
+  color: #92400e;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+}

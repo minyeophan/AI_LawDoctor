@@ -358,3 +358,26 @@
     min-height: 300px;
   }
 }
+
+@media (min-width: 1600px) {
+  .dashboard-header h1 { font-size: 28px; }
+  .my-section-title { font-size: 19px; margin-bottom: 16px; }
+  .activity-grid { border-radius: 14px; }
+  .activity-card { padding: 16px 32px; }
+  .card-icon { font-size: 24px; }
+  .card-title { font-size: 16px; }
+  .card-count { font-size: 18px; }
+  .analysis-grid { gap: 24px; margin-top: 48px; }
+  .analysis-card { padding: 36px; min-height: 520px; border-radius: 16px; }
+  .analysis-card-title { font-size: 17px; }
+  .analysis-card-sub { font-size: 12px; }
+  .donut-total { font-size: 34px; }
+  .donut-label { font-size: 13px; }
+  .risk-legend-name { font-size: 14px; }
+  .risk-legend-value { font-size: 14px; }
+  .upcoming-title { font-size: 15px; }
+  .upcoming-dday { font-size: 15px; min-width: 56px; }
+  .upcoming-date { font-size: 13px; }
+  .upcoming-item { padding: 14px 16px; border-radius: 10px; }
+  .risk-comment { font-size: 13px; }
+}

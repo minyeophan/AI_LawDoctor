@@ -576,3 +576,35 @@
 .settings-link-btn:hover {
   background: #dbeafe;
 }
+
+@media (min-width: 1600px) {
+  .settings-title {
+    font-size: 26px;
+  }
+  .settings-profile-card {
+    padding: 24px;
+  }
+  .settings-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 22px;
+  }
+  .settings-profile-name {
+    font-size: 17px;
+  }
+  .settings-profile-email {
+    font-size: 14px;
+  }
+  .settings-row {
+    padding: 12px 20px;
+  }
+  .settings-row-label {
+    font-size: 15px;
+  }
+  .settings-row-sub {
+    font-size: 13px;
+  }
+  .settings-section-title {
+    font-size: 13px;
+  }
+}

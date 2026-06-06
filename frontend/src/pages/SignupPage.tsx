@@ -22,9 +22,6 @@ import { IoClose } from 'react-icons/io5';
 import { useAuth } from '../context/AuthContext';
 import { colors, buttonSizes, inputSizes, borderRadius } from '../styles/theme';
 
-// ============================
-// 약관 내용
-// ============================
 const TERMS_CONTENT = `제1조 (목적)
 본 약관은 법닥(이하 "서비스")이 제공하는 AI 기반 부동산 계약서 분석 서비스의 이용에 관한 조건 및 절차, 기타 필요한 사항을 규정함을 목적으로 합니다.
 
@@ -51,9 +48,6 @@ const PRIVACY_CONTENT = `1. 수집하는 개인정보 항목
 4. 개인정보 제3자 제공
 수집된 개인정보는 제3자에게 제공하지 않습니다.`;
 
-// ============================
-// 약관 모달
-// ============================
 function AgreementModal({
   title,
   content,
@@ -82,7 +76,7 @@ function AgreementModal({
           background: '#fff',
           borderRadius: '16px',
           width: '100%',
-          maxWidth: '480px',
+          maxWidth: { xs: '480px', xl: '560px' },
           maxHeight: '80vh',
           display: 'flex',
           flexDirection: 'column',
@@ -90,7 +84,6 @@ function AgreementModal({
         }}
         onClick={e => e.stopPropagation()}
       >
-        {/* 헤더 */}
         <Box sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -98,17 +91,16 @@ function AgreementModal({
           p: '16px 20px',
           borderBottom: '1px solid #f1f5f9',
         }}>
-          <Typography sx={{ fontSize: '16px', fontWeight: 700, color: '#1e293b' }}>
+          <Typography sx={{ fontSize: { xs: '16px', xl: '18px' }, fontWeight: 700, color: '#1e293b' }}>
             {title}
           </Typography>
           <IconButton onClick={onClose} size="small">
             <IoClose size={20} color="#94a3b8" />
           </IconButton>
         </Box>
-        {/* 내용 */}
         <Box sx={{ p: '20px', overflowY: 'auto' }}>
           <Typography sx={{
-            fontSize: '13px',
+            fontSize: { xs: '13px', xl: '14px' },
             lineHeight: 1.8,
             color: '#475569',
             whiteSpace: 'pre-line',
@@ -116,13 +108,13 @@ function AgreementModal({
             {content}
           </Typography>
         </Box>
-        {/* 확인 버튼 */}
         <Box sx={{ p: '12px 20px', borderTop: '1px solid #f1f5f9' }}>
           <Button
             fullWidth
             onClick={onClose}
             sx={{
-              height: '40px',
+              height: { xs: '40px', xl: '46px' },
+              fontSize: { xs: '14px', xl: '15px' },
               background: colors.primary.main,
               color: '#fff',
               borderRadius: '8px',
@@ -139,9 +131,6 @@ function AgreementModal({
   );
 }
 
-// ============================
-// 회원가입 페이지
-// ============================
 export default function SignupPage() {
   const [name, setName] = useState('');
   const [birthYear, setBirthYear] = useState('');
@@ -164,8 +153,6 @@ export default function SignupPage() {
     agreements: '',
   });
   const [loading, setLoading] = useState(false);
-
-  // ✅ 약관 모달 상태
   const [modalType, setModalType] = useState<'terms' | 'privacy' | null>(null);
 
   const { signup } = useAuth();
@@ -236,30 +223,28 @@ export default function SignupPage() {
   const textFieldSx = (hasError: boolean) => ({
     '& .MuiOutlinedInput-root': {
       background: '#ffffff',
-      height: inputSizes.medium.height,
-      fontSize: inputSizes.medium.fontSize,
+      height: { xs: inputSizes.medium.height, xl: '48px' },
+      fontSize: { xs: inputSizes.medium.fontSize, xl: '15px' },
       '& fieldset': { borderColor: hasError ? colors.error : colors.gray[300] },
       '&:hover fieldset': { borderColor: hasError ? colors.error : colors.gray[400] },
       '&.Mui-focused fieldset': { borderColor: hasError ? colors.error : colors.primary.main, borderWidth: '1px' },
     },
   });
 
+  const labelSx = {
+    fontSize: { xs: '13px', xl: '15px' },
+    fontWeight: 500,
+    color: colors.gray[700],
+    mb: 0.5,
+  };
+
   return (
     <>
-      {/* ✅ 약관 모달 */}
       {modalType === 'terms' && (
-        <AgreementModal
-          title="이용약관"
-          content={TERMS_CONTENT}
-          onClose={() => setModalType(null)}
-        />
+        <AgreementModal title="이용약관" content={TERMS_CONTENT} onClose={() => setModalType(null)} />
       )}
       {modalType === 'privacy' && (
-        <AgreementModal
-          title="개인정보 수집 및 이용"
-          content={PRIVACY_CONTENT}
-          onClose={() => setModalType(null)}
-        />
+        <AgreementModal title="개인정보 수집 및 이용" content={PRIVACY_CONTENT} onClose={() => setModalType(null)} />
       )}
 
       <Box sx={{
@@ -270,16 +255,16 @@ export default function SignupPage() {
         background: colors.gray[50],
         py: 4,
       }}>
-        <Container maxWidth="xs">
-          <Box sx={{ borderRadius: borderRadius.lg, px: 4, py: 5 }}>
-            <Typography sx={{ fontSize: '24px', fontWeight: 700, color: colors.gray[800], mb: 5, textAlign: 'center' }}>
+        <Container maxWidth="xs" sx={{ maxWidth: { xl: '480px' } }}>
+          <Box sx={{ borderRadius: borderRadius.lg, px: { xs: 4, xl: 5 }, py: { xs: 5, xl: 6 } }}>
+            <Typography sx={{ fontSize: { xs: '24px', xl: '28px' }, fontWeight: 700, color: colors.gray[800], mb: 5, textAlign: 'center' }}>
               회원가입
             </Typography>
 
             <form onSubmit={handleSubmit}>
               {/* 이름 */}
               <Box sx={{ mb: 2 }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 500, color: colors.gray[700], mb: 0.5 }}>이름</Typography>
+                <Typography sx={labelSx}>이름</Typography>
                 <TextField
                   fullWidth
                   placeholder="이름을 입력하세요"
@@ -294,7 +279,7 @@ export default function SignupPage() {
 
               {/* 출생년도 */}
               <Box sx={{ mb: 2 }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 500, color: colors.gray[700], mb: 0.5 }}>출생년도</Typography>
+                <Typography sx={labelSx}>출생년도</Typography>
                 <FormControl fullWidth>
                   <Select
                     value={birthYear}
@@ -304,8 +289,8 @@ export default function SignupPage() {
                     IconComponent={KeyboardArrowDown}
                     sx={{
                       background: '#ffffff',
-                      height: inputSizes.medium.height,
-                      fontSize: inputSizes.medium.fontSize,
+                      height: { xs: inputSizes.medium.height, xl: '48px' },
+                      fontSize: { xs: inputSizes.medium.fontSize, xl: '15px' },
                       '& .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[300] },
                       '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[400] },
                       '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: colors.primary.main, borderWidth: '1px' },
@@ -323,7 +308,7 @@ export default function SignupPage() {
 
               {/* 이메일 */}
               <Box sx={{ mb: 2 }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 500, color: colors.gray[700], mb: 0.5 }}>이메일</Typography>
+                <Typography sx={labelSx}>이메일</Typography>
                 <TextField
                   fullWidth
                   placeholder="example@email.com"
@@ -338,7 +323,7 @@ export default function SignupPage() {
 
               {/* 비밀번호 */}
               <Box sx={{ mb: 2 }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 500, color: colors.gray[700], mb: 0.5 }}>비밀번호</Typography>
+                <Typography sx={labelSx}>비밀번호</Typography>
                 <TextField
                   fullWidth
                   type={showPassword ? 'text' : 'password'}
@@ -365,7 +350,7 @@ export default function SignupPage() {
 
               {/* 비밀번호 확인 */}
               <Box sx={{ mb: 3 }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 500, color: colors.gray[700], mb: 0.5 }}>비밀번호 확인</Typography>
+                <Typography sx={labelSx}>비밀번호 확인</Typography>
                 <TextField
                   fullWidth
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -398,7 +383,6 @@ export default function SignupPage() {
                 borderRadius: borderRadius.md,
                 background: '#ffffff',
               }}>
-                {/* 전체 동의 */}
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -407,12 +391,11 @@ export default function SignupPage() {
                       sx={{ color: colors.gray[400], '&.Mui-checked': { color: colors.primary.main } }}
                     />
                   }
-                  label={<Typography sx={{ fontSize: '14px', fontWeight: 600, color: colors.gray[800] }}>전체동의</Typography>}
+                  label={<Typography sx={{ fontSize: { xs: '14px', xl: '15px' }, fontWeight: 600, color: colors.gray[800] }}>전체동의</Typography>}
                   sx={{ mb: 1 }}
                 />
 
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                  {/* 만 14세 */}
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -423,13 +406,12 @@ export default function SignupPage() {
                       />
                     }
                     label={
-                      <Typography sx={{ fontSize: '13px', color: colors.gray[600] }}>
+                      <Typography sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600] }}>
                         만 14세 이상입니다 <span style={{ color: colors.error }}>(필수)</span>
                       </Typography>
                     }
                   />
 
-                  {/* 이용약관 */}
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <FormControlLabel
                       control={
@@ -441,12 +423,11 @@ export default function SignupPage() {
                         />
                       }
                       label={
-                        <Typography sx={{ fontSize: '13px', color: colors.gray[600] }}>
+                        <Typography sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600] }}>
                           이용약관 <span style={{ color: colors.error }}>(필수)</span>
                         </Typography>
                       }
                     />
-                    {/* ✅ 보기 버튼 */}
                     <Typography
                       onClick={() => setModalType('terms')}
                       sx={{ fontSize: '12px', color: colors.primary.main, cursor: 'pointer', textDecoration: 'underline', flexShrink: 0, mr: 1 }}
@@ -455,7 +436,6 @@ export default function SignupPage() {
                     </Typography>
                   </Box>
 
-                  {/* 개인정보 수집 및 이용 */}
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <FormControlLabel
                       control={
@@ -467,12 +447,11 @@ export default function SignupPage() {
                         />
                       }
                       label={
-                        <Typography sx={{ fontSize: '13px', color: colors.gray[600] }}>
+                        <Typography sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600] }}>
                           개인정보 수집 및 이용 <span style={{ color: colors.error }}>(필수)</span>
                         </Typography>
                       }
                     />
-                    {/* ✅ 보기 버튼 */}
                     <Typography
                       onClick={() => setModalType('privacy')}
                       sx={{ fontSize: '12px', color: colors.primary.main, cursor: 'pointer', textDecoration: 'underline', flexShrink: 0, mr: 1 }}
@@ -481,7 +460,6 @@ export default function SignupPage() {
                     </Typography>
                   </Box>
 
-                  {/* 마케팅 동의 */}
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -492,7 +470,7 @@ export default function SignupPage() {
                       />
                     }
                     label={
-                      <Typography sx={{ fontSize: '13px', color: colors.gray[600] }}>
+                      <Typography sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600] }}>
                         광고성 정보 수신 및 마케팅 활용 동의 (선택)
                       </Typography>
                     }
@@ -500,7 +478,6 @@ export default function SignupPage() {
                 </Box>
               </Box>
 
-              {/* 약관 에러 */}
               {errors.agreements && (
                 <FormHelperText error sx={{ ml: 0, mt: -2, mb: 2, fontSize: '12px' }}>{errors.agreements}</FormHelperText>
               )}
@@ -511,8 +488,8 @@ export default function SignupPage() {
                 type="submit"
                 disabled={loading}
                 sx={{
-                  height: buttonSizes.medium.height,
-                  fontSize: buttonSizes.medium.fontSize,
+                  height: { xs: buttonSizes.medium.height, xl: '48px' },
+                  fontSize: { xs: buttonSizes.medium.fontSize, xl: '16px' },
                   fontWeight: 600,
                   background: colors.primary.main,
                   color: 'white',
@@ -526,9 +503,8 @@ export default function SignupPage() {
                 {loading ? '가입 중...' : '회원가입'}
               </Button>
 
-              {/* 로그인 링크 */}
               <Box sx={{ textAlign: 'center' }}>
-                <Typography sx={{ fontSize: '13px', color: colors.gray[600] }}>
+                <Typography sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600] }}>
                   이미 아이디가 있으신가요?{' '}
                   <Link component={RouterLink} to="/login" underline="none" sx={{ fontWeight: 600, color: colors.primary.main }}>
                     로그인
