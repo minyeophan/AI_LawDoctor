@@ -24,3 +24,13 @@
     padding: 24px 16px;
   }
 }
+
+@media (min-width: 1600px) {
+  .mypage-container {
+    grid-template-columns: 320px 1fr;
+  }
+  .mypage-content {
+    padding: 40px 56px;
+    max-width: 100%;
+  }
+}

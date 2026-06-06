@@ -220,7 +220,6 @@ export default function Dashboard() {
         <div className="analysis-grid">
 
           {/* 왼쪽 — 최근 계약서 위험도 분포 */}
-          {riskSummary.docTitle && (
           <div className="analysis-card gray">
             <div className="analysis-card-header">
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -247,7 +246,7 @@ export default function Dashboard() {
               <div className="analysis-empty">
                 <p>분석된 계약서가 없습니다</p>
                 <span>계약서를 분석하고 보관함에 저장하면<br />위험 조항 현황을 확인할 수 있어요</span>
-                <button className="analysis-empty-btn" onClick={() => navigate('/ai')}>
+                <button className="analysis-empty-btn" onClick={() => navigate('/analysis')}>
                   계약서 분석하러 가기 →
                 </button>
               </div>
@@ -313,7 +312,6 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-)}   
           {/* 오른쪽 — 다가오는 일정 */}
           <div className="analysis-card blue">
             <div className="analysis-card-header">

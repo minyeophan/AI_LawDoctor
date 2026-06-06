@@ -31,79 +31,87 @@ export default function CommunityPage() {
   const [sortBy, setSortBy] = useState('최신순');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const TOTAL_PAGES = 10;
   const POSTS_PER_PAGE = 10;
 
-useEffect(() => {
-  const fetchPosts = async () => {
-    setIsLoading(true);
-    try {
-      const sortParam = sortBy === '조회순' ? 'views' : sortBy === '댓글순' ? 'comments' : 'latest';
-      const data = await communityAPI.getPosts(sortParam, selectedCategory, searchQuery);
-      setPosts(data);
-    } catch (err) {
-      console.error('게시글 로딩 실패:', err);
-      setPosts([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  fetchPosts();
-  setCurrentPage(1);
-}, [sortBy, selectedCategory, searchQuery]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setIsLoading(true);
+      try {
+        const sortParam = sortBy === '조회순' ? 'views' : sortBy === '댓글순' ? 'comments' : 'latest';
+        const data = await communityAPI.getPosts(sortParam, selectedCategory, searchQuery);
+        setPosts(data);
+      } catch (err) {
+        console.error('게시글 로딩 실패:', err);
+        setPosts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPosts();
+    setCurrentPage(1);
+  }, [sortBy, selectedCategory, searchQuery]);
 
-useEffect(() => {
-  const fetchBest = async () => {
-    try {
-      const data = await communityAPI.getBestPost();
-      setBestPost(data);
-    } catch (err) {
-      setBestPost(null);
-    }
-  };
-  fetchBest();
-}, []);
+  useEffect(() => {
+    const fetchBest = async () => {
+      try {
+        const data = await communityAPI.getBestPost();
+        setBestPost(data);
+      } catch (err) {
+        setBestPost(null);
+      }
+    };
+    fetchBest();
+  }, []);
 
-const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
-const pagedPosts = posts.slice(
-  (currentPage - 1) * POSTS_PER_PAGE,
-  currentPage * POSTS_PER_PAGE
-);
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const pagedPosts = posts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
+  );
 
   const categoryColor: Record<string, string> = {
     '부동산': 'cat-blue',
   };
 
   const renderPagination = () => {
-  const pages = [];
-  pages.push(
-    <button key="first" className="page-btn page-arrow" onClick={() => setCurrentPage(1)}>«</button>,
-    <button key="prev" className="page-btn page-arrow" onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</button>
-  );
-  for (let i = 1; i <= totalPages; i++) {
+    const pages = [];
     pages.push(
-      <button
-        key={i}
-        className={`page-btn ${currentPage === i ? 'active' : ''}`}
-        onClick={() => setCurrentPage(i)}
-      >
-        {i}
-      </button>
+      <button key="first" className="page-btn page-arrow" onClick={() => setCurrentPage(1)}>«</button>,
+      <button key="prev" className="page-btn page-arrow" onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</button>
     );
-  }
-  pages.push(
-    <button key="next" className="page-btn page-arrow" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}>›</button>,
-    <button key="last" className="page-btn page-arrow" onClick={() => setCurrentPage(totalPages)}>»</button>
-  );
-  return pages;
-};
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <button
+          key={i}
+          className={`page-btn ${currentPage === i ? 'active' : ''}`}
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+    pages.push(
+      <button key="next" className="page-btn page-arrow" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}>›</button>,
+      <button key="last" className="page-btn page-arrow" onClick={() => setCurrentPage(totalPages)}>»</button>
+    );
+    return pages;
+  };
 
   return (
     <div className="community-wrapper">
       <div className="community-container">
+
+        {/* 배너 */}
+        <div className="page-banner">
+          <div className="page-banner-text">
+            <h2 className="page-banner-title">커뮤니티</h2>
+            <p className="page-banner-sub">AI가 분석한 위험 조항을 공유하고, 실제 계약 사례와 사용자 후기를 확인해보세요.</p>
+          </div>
+        </div>
+
         {/* 헤더 */}
         <div className="community-header">
-          <h1 className="community-title">커뮤니티</h1>
+          <h1 className="community-title">전체 게시글</h1>
           <button className="write-btn" onClick={() => navigate('/community/write')}>
             글쓰기
           </button>
@@ -136,7 +144,7 @@ const pagedPosts = posts.slice(
           <div className="search-box">
             <input
               type="text"
-              placeholder="커뮤니티 검색하기"
+              placeholder="게시글을 검색해보세요"
               value={searchQuery}
               onChange={e => {
                 setSearchQuery(e.target.value);
@@ -171,7 +179,7 @@ const pagedPosts = posts.slice(
             pagedPosts.map(post => (
               <PostCard key={post.id} post={post} />
             ))
-  )}
+          )}
         </div>
 
         {/* 페이지네이션 */}

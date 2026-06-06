@@ -63,9 +63,15 @@ export default function FormPage() {
   return (
     <div className="form-page">
       <div className="form-container">
-        {/* 헤더 */}
-        <h1 className="form-page-title">법률 서식</h1>
-
+       {/* 배너 */}
+        <div className="form-banner">
+          <div className="form-banner-text">
+            <h2 className="form-banner-title">법률 서식</h2>
+            <p className="form-banner-sub">
+              부동산 계약에 필요한 표준 서식을 제공합니다. 임대차·매매·전세 계약서 등 다양한 서식을 다운로드하세요.
+            </p>
+          </div>
+        </div>
         {/* 검색 + 필터 */}
         <div className="controls-area">
           <div className="search-box">

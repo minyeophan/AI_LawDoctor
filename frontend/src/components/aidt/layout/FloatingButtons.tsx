@@ -46,7 +46,7 @@ const buildContentFromSelected = (items: RiskItem[], selectedIds: string[]): str
       const clauseText = item.clauseText ?? item.description ?? '';
       const reason = item.reason ?? '';
       const lines = [
-        `${idx + 1}. [${SEVERITY_LABEL[severity] ?? severity}]`,
+        `[${SEVERITY_LABEL[severity] ?? severity}]`,
         clauseText ? `위험 조항: ${clauseText}` : '',
         reason ? `위험 원인: ${reason}` : '',
       ].filter(Boolean);

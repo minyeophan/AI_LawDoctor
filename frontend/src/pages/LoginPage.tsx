@@ -127,8 +127,8 @@ export default function LoginPage() {
           pb: 12,
         }}
       >
-        <Container maxWidth="xs">
-          <Box sx={{ borderRadius: borderRadius.lg, px: 4, py: 5 }}>
+        <Container maxWidth="xs" sx={{ maxWidth: { xl: '480px' } }}>
+          <Box sx={{ borderRadius: borderRadius.lg, px: { xs: 4, xl: 5 }, py: { xs: 5, xl: 6 } }}>
             {/* 로고 */}
             <Box
               component={RouterLink}
@@ -144,7 +144,7 @@ export default function LoginPage() {
               }}
             >
               <img src={LogoImg} width={24} height={24} />
-              <Typography sx={{ fontSize: '24px', fontWeight: 700, color: colors.gray[800] }}>
+              <Typography sx={{ fontSize: { xs: '24px', xl: '28px' }, fontWeight: 700, color: colors.gray[800] }}>
                 법닥
               </Typography>
             </Box>
@@ -152,7 +152,7 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit}>
               {/* 이메일 */}
               <Box sx={{ mb: 2 }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 500, color: colors.gray[700], mb: 1 }}>
+                <Typography sx={{ fontSize: { xs: '13px', xl: '15px' }, fontWeight: 500, color: colors.gray[700], mb: 1 }}>
                   아이디
                 </Typography>
                 <TextField
@@ -165,8 +165,8 @@ export default function LoginPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       background: '#ffffff',
-                      height: inputSizes.medium.height,
-                      fontSize: inputSizes.medium.fontSize,
+                      height: { xs: inputSizes.medium.height, xl: '48px' },
+                      fontSize: { xs: inputSizes.medium.fontSize, xl: '15px' },
                       fontFamily: "'KoPub', sans-serif",
                       '& fieldset': { borderColor: errors.email ? colors.error : colors.gray[300] },
                       '&:hover fieldset': { borderColor: errors.email ? colors.error : colors.gray[400] },
@@ -183,7 +183,7 @@ export default function LoginPage() {
 
               {/* 비밀번호 */}
               <Box sx={{ mb: 1 }}>
-                <Typography sx={{ fontSize: '13px', fontWeight: 500, color: colors.gray[700], mb: 1 }}>
+                <Typography sx={{ fontSize: { xs: '13px', xl: '15px' }, fontWeight: 500, color: colors.gray[700], mb: 1 }}>
                   비밀번호
                 </Typography>
                 <TextField
@@ -214,8 +214,8 @@ export default function LoginPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       background: '#ffffff',
-                      height: inputSizes.medium.height,
-                      fontSize: inputSizes.medium.fontSize,
+                      height: { xs: inputSizes.medium.height, xl: '48px' },
+                      fontSize: { xs: inputSizes.medium.fontSize, xl: '15px' },
                       '& fieldset': { borderColor: errors.password ? colors.error : colors.gray[300] },
                       '&:hover fieldset': { borderColor: errors.password ? colors.error : colors.gray[400] },
                       '&.Mui-focused fieldset': { borderColor: errors.password ? colors.error : colors.primary.main, borderWidth: '1px' },
@@ -241,7 +241,7 @@ export default function LoginPage() {
                     />
                   }
                   label={
-                    <Typography sx={{ fontSize: '13px', color: colors.gray[600] }}>아이디 저장</Typography>
+                    <Typography sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600] }}>아이디 저장</Typography>
                   }
                 />
               </Box>
@@ -252,8 +252,8 @@ export default function LoginPage() {
                 type="submit"
                 disabled={loading}
                 sx={{
-                  height: buttonSizes.medium.height,
-                  fontSize: buttonSizes.medium.fontSize,
+                  height: { xs: buttonSizes.medium.height, xl: '48px' },
+                  fontSize: { xs: buttonSizes.medium.fontSize, xl: '16px' },
                   fontWeight: 600,
                   background: colors.primary.main,
                   color: 'white',
@@ -274,16 +274,15 @@ export default function LoginPage() {
                 </Typography>
               </Divider>
 
-              {/* ✅ 소셜 로그인 버튼 — 수평 반씩 배치 */}
+              {/* 소셜 로그인 버튼 */}
               <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                {/* 구글 */}
                 <Button
                   fullWidth
                   onClick={handleGoogleLogin}
                   disabled={loading}
                   sx={{
-                    height: buttonSizes.medium.height,
-                    fontSize: '13px',
+                    height: { xs: buttonSizes.medium.height, xl: '48px' },
+                    fontSize: { xs: '13px', xl: '14px' },
                     fontWeight: 500,
                     background: '#ffffff',
                     color: colors.gray[700],
@@ -299,14 +298,13 @@ export default function LoginPage() {
                   Google
                 </Button>
 
-                {/* 카카오 */}
                 <Button
                   fullWidth
                   onClick={handleKakaoLogin}
                   disabled={loading}
                   sx={{
-                    height: buttonSizes.medium.height,
-                    fontSize: '13px',
+                    height: { xs: buttonSizes.medium.height, xl: '48px' },
+                    fontSize: { xs: '13px', xl: '14px' },
                     fontWeight: 500,
                     background: '#FEE500',
                     color: '#3C1E1E',
@@ -325,15 +323,15 @@ export default function LoginPage() {
 
               {/* 하단 링크 */}
               <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-                <Link href="#" underline="none" sx={{ fontSize: '13px', color: colors.gray[600], '&:hover': { color: colors.gray[800] } }}>
+                <Link href="#" underline="none" sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600], '&:hover': { color: colors.gray[800] } }}>
                   아이디 찾기
                 </Link>
                 <Box sx={{ color: colors.gray[300] }}>|</Box>
-                <Link href="#" underline="none" sx={{ fontSize: '13px', color: colors.gray[600], '&:hover': { color: colors.gray[800] } }}>
+                <Link href="#" underline="none" sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600], '&:hover': { color: colors.gray[800] } }}>
                   비밀번호 재설정
                 </Link>
                 <Box sx={{ color: colors.gray[300] }}>|</Box>
-                <Link component={RouterLink} to="/signup" underline="none" sx={{ fontSize: '13px', color: colors.gray[600], '&:hover': { color: colors.gray[800] } }}>
+                <Link component={RouterLink} to="/signup" underline="none" sx={{ fontSize: { xs: '13px', xl: '14px' }, color: colors.gray[600], '&:hover': { color: colors.gray[800] } }}>
                   회원가입
                 </Link>
               </Box>
