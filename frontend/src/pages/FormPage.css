@@ -1,12 +1,37 @@
 .form-page {
   min-height: 100vh;
   background: #fff; 
-  padding: 30px 20px; 
+  padding: 40px 20px; 
 } 
 
 .form-container {
   width: 1024px;
   margin: 0 auto;
+}
+
+.form-banner {
+  padding: 0px 0px 24px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #F1F5F9
+}
+ 
+.form-banner-icon {
+  display: none;
+}
+ 
+.form-banner-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+ 
+.form-banner-sub {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
 }
 
 .form-page-title {
@@ -129,3 +154,32 @@
   background: #93c5fd;
   cursor: not-allowed;
 }
+
+@media (min-width: 1600px) {
+  .form-page {
+    padding: 48px 40px;
+  }
+  .form-container {
+    width: 1300px;
+  }
+  .form-banner-title {
+    font-size: 26px;
+  }
+  .form-banner-sub {
+    font-size: 14px;
+  }
+  .form-card {
+    padding: 10px 20px;
+  }
+  .form-card-title {
+    font-size: 14px;
+  }
+  .form-card-source {
+    font-size: 13px;
+  }
+  .form-download-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+ 

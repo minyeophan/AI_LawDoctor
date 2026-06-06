@@ -79,7 +79,9 @@ const features: { icon: ReactNode; title: string; desc: ReactNode }[] = [
  
       {/* ── Hero ── */}
       <section className="hero-section">
+        
         <div className="hero-inner reveal">
+          
           <h1 className="hero-title">
             복잡한 계약서를 쉽게 이해하도록<br />
             AI 법률 닥터<span className="hero-accent">AIDT</span>

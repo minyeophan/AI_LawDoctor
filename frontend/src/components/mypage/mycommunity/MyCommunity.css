@@ -297,3 +297,39 @@
   text-overflow: ellipsis;
   max-width: 300px;
 }
+@media (min-width: 1600px) {
+  .mycommunity-header h1 {
+    font-size: 26px;
+  }
+  .mycommunity-tab-btn {
+    font-size: 16px;
+    min-width: 140px;
+    padding: 10px 0;
+  }
+  .mycommunity-controls {
+    margin-bottom: 16px;
+  }
+  .mycommunity-count {
+    font-size: 15px;
+  }
+  .mycommunity-delete-btn {
+    height: 40px;
+    padding: 0 20px;
+    font-size: 15px;
+  }
+  .mycommunity-table th {
+    font-size: 15px;
+    padding: 10px 24px;
+  }
+  .mycommunity-table td {
+    font-size: 15px;
+    padding: 10px 24px;
+  }
+  .mycommunity-table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+  .mycommunity-empty-cell {
+    font-size: 15px;
+  }
+}

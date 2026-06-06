@@ -202,3 +202,20 @@
     display: none;
   }
 }
+@media (min-width: 1600px) {
+  
+  .menu-nav {
+    width: 1400px;
+    gap: 140px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .top-menu.sidebar-open {
+    width: calc(100% - 450px);
+  }
+  .menu-nav {
+    width: 1600px;
+    gap: 160px;
+  }
+}
