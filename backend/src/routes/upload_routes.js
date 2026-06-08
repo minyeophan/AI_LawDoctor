@@ -1,9 +1,10 @@
+import authMiddleware from "../middleware/auth_middle.js";
 import express from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 
-import { afterUpload } from "../controllers/upload_controller.js";
+import { afterUpload, getUploadByDocumentId } from "../controllers/upload_controller.js";
 
 const router = express.Router();
 
@@ -29,11 +30,14 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-router.post('/upload', (req, res, next) => {
+router.post('/', (req, res, next) => {
     req.setTimeout(30000, () => {
         res.status(408).json({ message: "파일 업로드 시간 초과" });
     });
     next();
-}, upload.single('file'), afterUpload);
+}, authMiddleware, upload.single('file'), afterUpload);  
+
+router.get('/info/:documentId', getUploadByDocumentId);
 
 export default router;
+

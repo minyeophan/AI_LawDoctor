@@ -101,7 +101,6 @@ useEffect(() => {
         return;
       }
     }
-
     setIsConverting(true);
     try {
       const { html } = await documentsAPI.convertDocument(docId);
@@ -121,6 +120,82 @@ useEffect(() => {
 
   convertExisting();
 }, []);
+
+// 기존 fromStorage useEffect를 아래로 교체
+// 기존 fromStorage useEffect를 아래로 교체
+useEffect(() => {
+  if (!location.state?.fromStorage) return;
+  const loadFromStorage = async () => {
+    const docId = location.state?.documentId;
+    if (!docId) return;
+    setIsConverting(true);
+    try {
+      const res = await documentsAPI.getUploadInfo(docId);
+      setCurrentDocument({
+        documentId: docId,
+        filename: res.originalname,
+        status: 'completed',
+        uploadDate: res.createdAt,
+        content: '',
+        size: res.fileSize,
+      } as any);
+      const result = await analyzeAPI.getAnalysisResult(docId);
+      setAnalysisData(result);
+      // convertDocument만 별도 try-catch
+      try {
+        const { html } = await documentsAPI.convertDocument(docId);
+        const { masked, detected, counts } = maskPersonalInfo(html);
+        setEditedHtml(masked);
+        setHasPersonalInfo(detected);
+        setIsMasked(detected);
+        setMaskCounts(counts);
+      } catch (convertError) {
+        console.error('본문 변환 실패 (파일 없음):', convertError);
+      }
+      // 변환 성공/실패 상관없이 항상 실행
+      setAnalyzedMenus(new Set(['summary', 'danger', 'guide']));
+      setSelectedMenu('document');
+    } catch (e) {
+      console.error('보관함 문서 로딩 실패:', e);
+      setSelectedMenu('document'); // 에러 시에도 본문 탭
+    } finally {
+      setIsConverting(false);
+    }
+  };
+  loadFromStorage();
+}, [location.state]);
+
+useEffect(() => {
+  if (!location.state?.fromDraft) return;
+  const loadFromDraft = async () => {
+    const docId = location.state?.documentId;
+    if (!docId) return;
+    setIsConverting(true);
+    try {
+      const res = await documentsAPI.getUploadInfo(docId);
+      setCurrentDocument({
+        documentId: docId,
+        filename: res.originalname,
+        status: 'uploaded',
+        uploadDate: res.createdAt,
+        content: '',
+        size: res.fileSize,
+      } as any);
+      const { html } = await documentsAPI.convertDocument(docId);
+      const { masked, detected, counts } = maskPersonalInfo(html);
+      setEditedHtml(masked);
+      setHasPersonalInfo(detected);
+      setIsMasked(detected);
+      setMaskCounts(counts);
+      setSelectedMenu('document');
+    } catch (e) {
+      console.error('미분석 문서 로딩 실패:', e);
+    } finally {
+      setIsConverting(false);
+    }
+  };
+  loadFromDraft();
+}, [location.state]);
 
 const navigate = useNavigate();
 
@@ -353,6 +428,13 @@ const getAnalysisKey = (type: AnalysisType) => {
 
   // 콘텐츠 렌더링
   const renderContent = () => {
+if (isConverting || ((location.state?.fromStorage || location.state?.fromDraft) && !currentDocument)) {
+    return <div className="content-section" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="content-section" style={{ position: 'relative', minHeight: '400px' }}>
+      <LoadingOverlay message="내 계약서를 불러오는 중입니다..." />
+    </div>
+    </div>;
+    }
     if (!currentDocument) {
       return (
         <div className="content-section upload-prompt">
