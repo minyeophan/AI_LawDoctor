@@ -49,7 +49,7 @@ export const getMyPageList = async (req, res, next) => {
         ? { createdAt: 1 }
         : { createdAt: -1 };
 
-    const query = { userID: req.user.userID };
+   const query = { userID: req.user._id.toString() };
 
     if (contractType && contractType !== "전체") {
       query.contractType = contractType;
@@ -66,23 +66,26 @@ export const getMyPageList = async (req, res, next) => {
         if (category === "draft") {
           if (file.isSaved === true) return null;
 
-          return {
-            documentId: file.documentId,
-            contractType: file.contractType || "부동산",
-            title: file.originalname,
-            updatedAt: formatDate(file.updatedAt),
-            progress: analysis?.progress || 0,
-            statusText: resolveAnalysisStatus(analysis?.status),
-          };
-        } else {
-          if (file.isSaved !== true) return null;
-
+          const result = await Result.findOne({ documentId: file.documentId }).lean();
           return {
             documentId: file.documentId,
             contractType: file.contractType || "부동산",
             title: file.originalname,
             uploadDate: formatDate(file.createdAt),
             analysisStatus: resolveAnalysisStatus(analysis?.status),
+            riskItems: result?.riskItems || [],  // ✅ 추가
+          };
+        } else {
+          if (file.isSaved !== true) return null;
+
+          const result = await Result.findOne({ documentId: file.documentId }).lean();
+          return {
+            documentId: file.documentId,
+            contractType: file.contractType || "부동산",
+            title: file.originalname,
+            uploadDate: formatDate(file.createdAt),
+            analysisStatus: resolveAnalysisStatus(analysis?.status),
+            riskItems: result?.riskItems || [],  // ✅ 추가
           };
         }
       })
@@ -127,7 +130,7 @@ export const saveDocumentToArchive = async (req, res, next) => {
     await Upload.updateOne(
       { documentId },
       {
-        userID: req.user.userID,
+        userID: req.user._id.toString(),
         isSaved: true,
       }
     );
@@ -142,6 +145,8 @@ export const saveDocumentToArchive = async (req, res, next) => {
     next(error);
   }
 };
+
+
 
 export const getMyCommunityArchive = async (req, res, next) => {
   try {
@@ -356,6 +361,24 @@ export const deleteMyCommunityArchive = async (req, res, next) => {
     });
   } catch (error) {
     console.error("커뮤니티 보관함 삭제 에러:", error);
+    next(error);
+  }
+};
+
+export const deleteDocument = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: '로그인이 필요합니다.' });
+    }
+    const { documentId } = req.params;
+   const upload = await Upload.findOne({ documentId, userID: req.user._id.toString() });
+    if (!upload) {
+      return res.status(404).json({ message: '문서를 찾을 수 없습니다.' });
+    }
+    await Upload.deleteOne({ documentId });
+    return res.status(200).json({ message: '삭제되었습니다.', documentId });
+  } catch (error) {
+    console.error('문서 삭제 에러:', error);
     next(error);
   }
 };

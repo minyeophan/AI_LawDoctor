@@ -46,7 +46,7 @@ function Navbar() {
           <Link to="/" className="logo-section" onClick={closeMobileMenu}>
             <div className='logo-box'>
               <img src={logoImage} alt="로고" className="logo-svg" />
-              <p>법닥</p>
+              <p>법률닥터</p>
             </div>
           </Link>
 

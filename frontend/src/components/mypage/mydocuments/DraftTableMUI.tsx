@@ -112,7 +112,7 @@ function DraftRow({
   const handleView = () => {
     handleClose();
     navigate('/analysis', {
-      state: { documentId: draft.id, filename: draft.title, autoAnalyze: true },
+      state: { documentId: draft.id, filename: draft.title, autoAnalyze: true, fromDraft: true },
     });
   };
 

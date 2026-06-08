@@ -21,7 +21,6 @@ interface FloatingButtonsProps {
   onToggle: (type: 'chatbot' | 'notification' | 'search') => void;
   riskItems?: RiskItem[];
   documentFilename?: string;
-  // ✅ 공용 토스트 — AiPage에서 주입
   onShowToast: (message: string, type?: ToastType) => void;
 }
 
@@ -136,11 +135,11 @@ function FloatingButtons({
       await mypageAPI.saveDocument(currentDocument.documentId);
       setShowSaveModal(false);
       setShowSaveComplete(true);
-      setTimeout(() => {
-        setShowSaveComplete(false);
-        setCurrentDocument(null);
-        navigate('/mypage');
-      }, 2000);
+      onShowToast('저장되었습니다 ✓', 'success');
+        setTimeout(() => {
+          setCurrentDocument(null);
+          navigate('/mypage');
+        }, 1500);
     } catch (error) {
       console.error('저장 실패:', error);
       onShowToast(`저장 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`, 'error');

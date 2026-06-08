@@ -145,7 +145,7 @@ export default function LoginPage() {
             >
               <img src={LogoImg} width={24} height={24} />
               <Typography sx={{ fontSize: { xs: '24px', xl: '28px' }, fontWeight: 700, color: colors.gray[800] }}>
-                법닥
+                법률닥터
               </Typography>
             </Box>
 

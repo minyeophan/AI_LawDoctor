@@ -86,7 +86,7 @@ passport.deserializeUser(async (id, done) => {
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", authRouter);
-app.use("/api", uploadRouter);
+app.use("/api/upload", uploadRouter);
 app.use("/api", analyzeRouter);
 app.use("/api", resultRouter);
 app.use("/api/form", formRouter);
