@@ -43,7 +43,7 @@ CORRECTIONS_DIR = next(
 # AI의견 / 전문가의견 마커 패턴
 _AI_MARKER = re.compile(r'(?im)^ai\s*의견\s*[:：]')
 _EXPERT_MARKER = re.compile(
-    r'(?im)^(ai와\s*다른\s*전문가\s*의견|ai\s*의견에\s*추가한.*?전문가\s*의견)\s*[:：]'
+    r'(?im)^(ai와\s*다른\s*전문가\s*의견|ai\s*의견에\s*추가한.*?전문가\s*의견|전문가\s*수정\s*의견|전문가\s*추가\s*의견)\s*[:：]'
 )
 
 
@@ -80,6 +80,7 @@ def _split_into_blocks(text: str) -> list[dict]:
         raw_before = text[prev_expert_marker_end:ai_start].strip()
         paragraphs = [p.strip() for p in re.split(r'\n\s*\n', raw_before) if p.strip()]
         clause_text = paragraphs[-1] if paragraphs else ""
+        clause_text = re.sub(r'(?is)^분석[한할]\s*조항\s*[:：]\s*', '', clause_text).strip()
 
         # 이번 AI마커 이후 ~ 다음 AI마커 이전 범위에서 전문가의견 마커 탐색
         expert_match = None
@@ -103,12 +104,23 @@ def _split_into_blocks(text: str) -> list[dict]:
         # 다음 블록 조항이 끝에 섞일 수 있으므로 마지막 단락 제거
         raw_expert = text[expert_match.end():next_ai_start].strip()
         if i + 1 < len(ai_matches):
-            ep = [p.strip() for p in re.split(r'\n\s*\n', raw_expert) if p.strip()]
-            expert_opinion = "\n\n".join(ep[:-1]) if len(ep) > 1 else raw_expert
+            next_clause_marker = next(
+                (
+                    m for m in re.finditer(r'(?im)^\s*분석[한할]\s*조항\s*[:：]', raw_expert)
+                    if m.start() > 0
+                ),
+                None,
+            )
+            if next_clause_marker:
+                expert_opinion = raw_expert[:next_clause_marker.start()].strip()
+            else:
+                ep = [p.strip() for p in re.split(r'\n\s*\n', raw_expert) if p.strip()]
+                expert_opinion = "\n\n".join(ep[:-1]) if len(ep) > 1 else raw_expert
         else:
             expert_opinion = raw_expert
 
-        correction_type = "correction" if "다른" in expert_match.group(1) else "addition"
+        marker_text = expert_match.group(1)
+        correction_type = "correction" if ("다른" in marker_text or "수정" in marker_text) else "addition"
         prev_expert_marker_end = expert_match.end()
 
         if clause_text and expert_opinion:

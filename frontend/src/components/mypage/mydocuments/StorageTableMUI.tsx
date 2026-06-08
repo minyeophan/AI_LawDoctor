@@ -103,7 +103,7 @@ function StorageRow({
 
   const handleView = () => {
     handleClose();
-    navigate('/ai', { state: { documentId: document.id, filename: document.title, fromStorage: true } });
+   navigate('/analysis', { state: { documentId: document.id, filename: document.title, fromStorage: true } });
   };
 
   const handleDownload = () => {

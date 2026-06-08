@@ -47,7 +47,7 @@ const mockCommunityResults: CommunityResult[] = [
   {
     id: '3',
     type: 'community',
-    title: '법닥으로 계약서 분석해봤는데 실제로 도움이 됐어요',
+    title: '법률닥터로 계약서 분석해봤는데 실제로 도움이 됐어요',
     preview: '특히 잔금 지급 조건이랑 하자담보책임 관련 조항에서 불리한 부분을 미리 발견해서 계약 전에 수정 요청할 수 있었어요...',
     date: '2026-03-28',
     views: 200,

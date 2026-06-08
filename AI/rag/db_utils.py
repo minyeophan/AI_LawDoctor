@@ -44,22 +44,37 @@ def objectid_to_uuid(obj_id: ObjectId) -> str:
     return str(uuid.uuid5(uuid.NAMESPACE_DNS, str(obj_id)))
 
 
+def ensure_payload_indexes(qdrant: QdrantClient):
+    """필터링에 필요한 payload index가 없으면 생성 (기존 컬렉션에도 안전하게 적용)."""
+    for field, schema in [
+        ("type", models.PayloadSchemaType.KEYWORD),
+        ("contract_type", models.PayloadSchemaType.TEXT),
+    ]:
+        try:
+            qdrant.create_payload_index(
+                collection_name=LAW_COLLECTION,
+                field_name=field,
+                field_schema=schema,
+            )
+        except Exception:
+            pass  # 이미 존재하면 무시
+
+
 def ensure_qdrant_collection(qdrant: QdrantClient):
     collections = [c.name for c in qdrant.get_collections().collections]
-    if LAW_COLLECTION in collections:
-        return
-
-    qdrant.create_collection(
-        collection_name=LAW_COLLECTION,
-        vectors_config={
-            DENSE_VECTOR_NAME: models.VectorParams(
-                size=DENSE_VECTOR_SIZE,
-                distance=models.Distance.COSINE,
-            )
-        },
-        sparse_vectors_config={
-            SPARSE_VECTOR_NAME: models.SparseVectorParams(
-                modifier=models.Modifier.IDF
-            )
-        },
-    )
+    if LAW_COLLECTION not in collections:
+        qdrant.create_collection(
+            collection_name=LAW_COLLECTION,
+            vectors_config={
+                DENSE_VECTOR_NAME: models.VectorParams(
+                    size=DENSE_VECTOR_SIZE,
+                    distance=models.Distance.COSINE,
+                )
+            },
+            sparse_vectors_config={
+                SPARSE_VECTOR_NAME: models.SparseVectorParams(
+                    modifier=models.Modifier.IDF
+                )
+            },
+        )
+    ensure_payload_indexes(qdrant)

@@ -38,7 +38,7 @@ const handleSubmit = async () => {
         <div className="write-header">
             <button className="write-home-btn" onClick={() => navigate('/')}>
              <img src={logoImage} alt="로고" className="logo-svg" />
-            법닥
+            법률닥터
             </button>
             <h1 className="write-title-text">게시글 작성</h1>
             <button
