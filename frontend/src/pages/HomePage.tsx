@@ -109,7 +109,7 @@ const features: { icon: ReactNode; title: string; desc: ReactNode }[] = [
       {/* ── 부가 기능 소개 ── */}
       <section className="features-section">
         <div className="section-inner reveal">
-          <h2 className="section-title">분석 이후의 과정도 법닥과 함께</h2>
+          <h2 className="section-title">분석 이후의 과정도 법률닥터와 함께</h2>
           <p className="section-sub">계약 일정 관리, 필요한 서식 다운로드, 커뮤니티 사례 검색까지 한 곳에서</p>
           <div className="features-grid">
             {features.map((f) => (

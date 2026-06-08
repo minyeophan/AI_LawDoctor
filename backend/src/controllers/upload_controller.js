@@ -11,7 +11,7 @@ export const afterUpload = async (req, res, next) => {
         }
 
         const documentId = uuidv4();
-        const userID = req.user?.userID || null;  // 로그인한 사용자 ID (선택사항)
+        const userID = req.user?._id?.toString() || null;
 
         const saved = await Upload.create({
             userID,
@@ -35,4 +35,25 @@ export const afterUpload = async (req, res, next) => {
         console.error(error);
         next(error);
     }
+};
+
+export const getUploadByDocumentId = async (req, res, next) => {
+  try {
+    const { documentId } = req.params;
+    const upload = await Upload.findOne({ documentId }).lean();
+    if (!upload) {
+      return res.status(404).json({ message: '문서를 찾을 수 없습니다.' });
+    }
+    return res.status(200).json({
+      documentId: upload.documentId,
+      originalname: upload.originalname,
+      filePath: upload.filePath,
+      mimetype: upload.mimetype,
+      fileSize: upload.fileSize,
+      createdAt: upload.createdAt,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 };
