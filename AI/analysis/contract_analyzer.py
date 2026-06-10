@@ -1,5 +1,4 @@
 # contract_analyzer.py
-from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 from json_repair import repair_json
@@ -7,10 +6,10 @@ import os
 import json
 import re
 from analysis.law_search import search_laws, search_expert_corrections
+from gemini_retry import generate_content_with_retry
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-client = genai.Client(api_key=GEMINI_API_KEY)
 
 
 def _build_law_context(law_refs: list[dict]) -> str:
@@ -89,8 +88,7 @@ def analyze_contract(text: str) -> dict:
     """
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
+        response = generate_content_with_retry(
             contents=prompt,
             config=types.GenerateContentConfig(
                 system_instruction=(

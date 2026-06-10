@@ -14,7 +14,6 @@ import base64
 import pytesseract
 from PIL import Image
 import pdfplumber
-from google import genai
 from google.genai import types as genai_types
 from dotenv import load_dotenv
 
@@ -24,10 +23,9 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from ocr.pdf_extractor import extract_text_from_pdf
 from analysis.contract_analyzer import analyze_contract
 from analysis.chatbot_analyzer import answer_chat
+from gemini_retry import generate_content_with_retry
 
 load_dotenv()
-
-_gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 app = FastAPI()
 
@@ -102,8 +100,7 @@ def _process_hwp_images(html: str, output_dir: str) -> str:
 
         if not alt_text:
             try:
-                response = _gemini_client.models.generate_content(
-                    model="gemini-2.0-flash",
+                response = generate_content_with_retry(
                     contents=[
                         genai_types.Part.from_bytes(data=img_bytes, mime_type=mime),
                         _HWP_IMG_PROMPT,
@@ -244,8 +241,7 @@ async def convert_pdf(file: UploadFile = File(...)):
                     pil_image.save(buffer, format="PNG")
                     img_bytes = buffer.getvalue()
 
-                    response = _gemini_client.models.generate_content(
-                        model="gemini-2.0-flash",
+                    response = generate_content_with_retry(
                         contents=[
                             genai_types.Part.from_bytes(
                                 data=img_bytes,
