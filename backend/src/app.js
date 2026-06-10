@@ -22,6 +22,7 @@ import commentRouter from "./routes/comment_routes.js";
 import mypageRouter from "./routes/mypage_routes.js";
 import chatRouter from "./routes/chat_routes.js";
 import calendarRouter from "./routes/calendar_routes.js";
+import alarmRouter from "./routes/alarm_routes.js";
 import { sendScheduleNotifications } from "./controllers/calendar_controller.js";
 
 dotenv.config();
@@ -96,6 +97,7 @@ app.use("/api/posts", postRouter);
 app.use("/api", commentRouter);
 app.use("/api/mypage", mypageRouter);
 app.use("/api/calendar", calendarRouter);
+app.use("/api", alarmRouter);
 app.get("/", (req, res) => {
   res.json({
     msg: "AI Legal Doctor Backend OK",

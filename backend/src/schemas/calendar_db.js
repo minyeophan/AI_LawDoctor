@@ -51,15 +51,24 @@ const calendarSchema = new Schema(
       trim: true,
     },
 
+    alarm: {
+      type: Number,
+      default: 1440,
+    },
+
     alarmEnabled: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
     googleEventId: {
       type: String,
-      default: "",
-      index: true,
+      default: null,
+    },
+
+    kakaoEventId: {
+      type: String,
+      default: null,
     },
 
     isDeleted: {

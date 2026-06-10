@@ -1,4 +1,3 @@
-# /api/calendar 경로에 대한 명세
 paths:
   /api/calendar:
     get:
@@ -26,10 +25,10 @@ paths:
           description: "로그인이 필요합니다."
 
     post:
-      summary: "새 일정 작성 및 Google 등록"
+      summary: "새 일정 작성 및 외부 캘린더 연동"
       tags:
         - Calendar
-      description: "사용자의 Google 토큰을 사용하여 Google Calendar에 이벤트를 삽입하고, 성공 시 DB에 데이터를 저장합니다."
+      description: "사용자의 토큰 상태에 따라 Google Calendar 및 카카오 톡캘린더에 이벤트를 동시 등록하고 DB에 저장합니다."
       requestBody:
         required: true
         content:
@@ -40,29 +39,30 @@ paths:
               properties:
                 scheduleName:
                   type: string
-                  description: "Schedule title"
+                  description: "일정 제목"
                   example: "전세 계약 확정일자 신청"
                 startDate:
                   type: string
                   format: date-time
-                  example: "2026-06-01T09:00:00Z"
+                  description: "일정 시작 일시 (⚠️ 카카오 알림톡 정상 작동을 위해 무조건 미래 날짜로 테스트)"
+                  example: "2026-06-15T09:00:00Z"
                 endDate:
                   type: string
                   format: date-time
-                  example: "2026-06-01T10:00:00Z"
+                  example: "2026-06-15T10:00:00Z"
                 alarm:
                   type: integer
                   default: 1440
-                  description: "Alarm time in minutes before event"
+                  description: "일정 시작 몇 분 전 알림을 보낼지 설정 (카카오 톡캘린더 연동 규격 - 분 단위)"
                   example: 1440
                 alarmEnabled:
                   type: boolean
                   default: true
-                  description: "Whether alarm is enabled"
+                  description: "알림 활성화 여부"
                   example: true
       responses:
         201:
-          description: "일정 생성 성공"
+          description: "일정 생성 및 외부 캘린더 등록 성공"
           content:
             application/json:
               schema:
@@ -74,143 +74,9 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/ScheduleResponse'
-        403:
-          description: "Google 계정 연동 필요"
-
-  /api/calendar/{id}:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        description: "일정의 MongoDB 고유 ID"
-
-    patch:
-      summary: "일정 수정"
-      tags:
-        - Calendar
-      description: "DB 정보를 업데이트하고, 연동된 경우 Google Calendar 이벤트도 동기화하여 수정합니다."
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ScheduleUpdate'
-      responses:
-        200:
-          description: "수정 성공"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    $ref: '#/components/schemas/ScheduleResponse'
-        404:
-          description: "일정을 찾을 수 없음"
-
-    delete:
-      summary: "일정 삭제"
-      tags:
-        - Calendar
-      description: "Google Calendar 이벤트를 먼저 삭제한 후, DB에서 해당 일정을 제거합니다."
-      responses:
-        200:
-          description: "삭제 성공"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-
-components:
-  schemas:
-    ScheduleResponse:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "60d...abc"
-        userRef:
-          type: string
-          description: "User ObjectId reference"
-          example: "507f1f77bcf86cd799439011"
-        userId:
-          type: string
-          example: "user_1d688e04-85b4-47de-b729-69ea360702c5"
-        title:
-          type: string
-          example: "전세 계약 확정일자 신청"
-        scheduleName:
-          type: string
-          description: "Client compatibility field (same as title)"
-          example: "전세 계약 확정일자 신청"
-        description:
-          type: string
-          example: ""
-        startDate:
-          type: string
-          format: date-time
-          example: "2026-06-01T09:00:00.000Z"
-        endDate:
-          type: string
-          format: date-time
-          example: "2026-06-01T10:00:00.000Z"
-        location:
-          type: string
-          example: ""
-        category:
-          type: string
-          example: "general"
-        alarm:
-          type: integer
-          default: 1440
-          example: 1440
-        alarmEnabled:
-          type: boolean
-          default: false
-          example: true
-        googleEventId:
-          type: string
-          example: "abc123@google.com"
-        isDeleted:
-          type: boolean
-          default: false
-          example: false
-        createdAt:
-          type: string
-          format: date-time
-          example: "2026-05-02T11:42:24.000Z"
-        updatedAt:
-          type: string
-          format: date-time
-          example: "2026-05-02T11:42:24.000Z"
-
-    ScheduleUpdate:
-      type: object
-      properties:
-        scheduleName:
-          type: string
-          description: "Schedule title (maps to title field)"
-          example: "전세 계약 확정일자 신청"
-        startDate:
-          type: string
-          format: date-time
-          example: "2026-06-01T09:00:00.000Z"
-        endDate:
-          type: string
-          format: date-time
-          example: "2026-06-01T10:00:00.000Z"
-        alarm:
-          type: integer
-          example: 1440
-        alarmEnabled:
-          type: boolean
-          example: true
+        401:
+          description: "로그인이 필요합니다."
+        400:
+          description: "유효하지 않은 날짜 형식입니다."
+        500:
+          description: "서버 오류 및 일정 생성 실패"

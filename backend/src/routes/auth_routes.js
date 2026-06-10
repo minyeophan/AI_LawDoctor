@@ -25,7 +25,7 @@ router.get("/google/test", (req, res) => {
   res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.GOOGLE_REDIRECT_URI)}&scope=profile%20email%20https://www.googleapis.com/auth/calendar&response_type=code&access_type=offline&prompt=consent`);
 });
 router.get("/kakao/test", (req, res) => {
-  res.redirect(`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.KAKAO_REDIRECT_URI)}&response_type=code&scope=profile_nickname,profile_image,account_email,talk_message`);
+  res.redirect(`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.KAKAO_REDIRECT_URI)}&response_type=code&scope=profile_nickname,account_email,talk_calendar`);
 });
 
 export default router;

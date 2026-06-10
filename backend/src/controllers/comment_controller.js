@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Comment from "../schemas/comment_db.js";
 import Post from "../schemas/post_db.js";
 import User from "../schemas/user_db.js";
+import { createAlarmHelper } from "./alarm_controller.js";
 
 const { Types } = mongoose;
 
@@ -151,6 +152,15 @@ export const createComment = async (req, res, next) => {
       "name"
     );
 
+    // 댓글 작성 성공 시 게시글 작성자에게 알림 생성
+    await createAlarmHelper({
+      receiverRef: post.userRef,
+      senderRef: req.user._id,
+      type: "comment",
+      postRef: post._id,
+      commentRef: comment._id,
+    });
+
     return res.status(201).json(await serializeComment(populatedComment));
   } catch (error) {
     console.error("createComment error:", error);
@@ -254,6 +264,17 @@ export const likeComment = async (req, res, next) => {
     }
 
     await comment.save();
+
+    // 댓글 좋아요 토글 시, 좋아요가 새로 추가되었을 때만 댓글 작성자에게 알림 생성
+    if (!isLiked) {
+      await createAlarmHelper({
+        receiverRef: comment.userRef,
+        senderRef: req.user._id,
+        type: "like_comment",
+        postRef: comment.postId,
+        commentRef: comment._id,
+      });
+    }
 
     return res.status(200).json({
       liked: !isLiked,
