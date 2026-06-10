@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from google import genai
 
 from analysis.law_search import search_legal_sources, build_context_text
+from gemini_retry import PRIMARY_MODEL, FALLBACK_MODEL
 
 load_dotenv()
 
@@ -14,10 +15,7 @@ if not GEMINI_API_KEY:
 
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)
 
-PRIMARY_MODEL = "gemini-2.5-flash"
-FALLBACK_MODEL = "gemini-2.0-flash"
-
-GENERATION_RETRY_COUNT = 2
+GENERATION_RETRY_COUNT = 3
 
 CHAT_TOP_K = 1
 CHAT_PREFETCH_LIMIT = 4
@@ -289,7 +287,7 @@ def generate_with_retry(prompt: str, max_retries: int = GENERATION_RETRY_COUNT) 
 
                 if _is_503_error(error_text):
                     if attempt < max_retries - 1:
-                        wait_time = (2 ** attempt) + random.uniform(0, 0.5)
+                        wait_time = (1, 3)[attempt]
                         time.sleep(wait_time)
                         continue
                     break
