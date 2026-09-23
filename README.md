@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/readme/Rm_main.png" width="100%" alt="AI 법률닥터">
+  <img src="./docs/readme/Rm_main_3.png" width="100%" alt="AI 법률닥터">
 </p>
 
 **AI 법률닥터**는 부동산 계약서를 분석하여 사용자가 놓치기 쉬운 위험 조항을 확인하고,
@@ -28,11 +28,13 @@ AI 법률 챗봇, 커뮤니티, 법률서식, 일정관리 등 계약 전후에 
 
 AI 법률닥터의 주요 기능과 실제 서비스 흐름을 시연영상에서 확인할 수 있습니다.
 
-<p align="center">
-  <a href="https://aidoc.kro.kr">
-    <b>🌐 AI 법률닥터 서비스 바로가기</b>
-  </a>
-</p>
-
 <!-- 아래 URL은 GitHub에 영상을 업로드한 뒤 생성되는 실제 영상 URL로 교체 -->
 https://github.com/user-attachments/assets/여기에-영상-ID
+
+## ▪️ 서비스 바로가기
+## ▪️ 서비스 바로가기
+
+> 👉 [AI 법률 닥터 서비스 바로가기](https://aidoc.kro.kr)
+**사이트 서버가 안열려있는 상태
+
+---
