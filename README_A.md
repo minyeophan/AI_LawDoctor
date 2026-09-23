@@ -7,10 +7,9 @@
 검색 결과를 분석 Context에 반영하여 요약, 위험 조항, 판단 근거, 대응 가이드 및 개선 조항을 생성합니다.
 
 <p align="center">
-  <img width="1166" height="657"
-       alt="AI 분석 및 결과 조회 흐름"
-       src="https://github.com/user-attachments/assets/7a960719-af88-47c3-934b-7735ff4446c6" />
+  <img src="./docs/readme/Rm_AIflow.png" width="850" alt="AI 분석 및 결과 조회 흐름">
 </p>
+
 
 > 계약서 업로드부터 문서 처리, AI 분석, 결과 저장 및 조회까지 하나의 흐름으로 연결하여
 > 사용자에게 구조화된 계약 분석 결과를 제공합니다.
@@ -25,10 +24,9 @@ AI 법률닥터는 계약서 원문만을 생성형 AI에 전달하는 방식에
 계약 유형을 먼저 확인한 뒤 의미 기반 Dense Search와 BM25 기반 Sparse Search를 함께 수행하고,
 검색 결과를 RRF 방식으로 재정렬하여 관련성이 높은 법령 및 전문가 사례를 Gemini 분석 Context에 반영합니다.
 
+
 <p align="center">
-  <img width="1168" height="654"
-       alt="RAG 기반 AI 분석 메커니즘"
-       src="https://github.com/user-attachments/assets/1db4951a-1f28-45ea-a1e9-ce8c98c662a3" />
+  <img src="./docs/readme/Rm_Rag.png" width="850" alt="RAG 기반 AI 분석 메커니즘">
 </p>
 
 ### 핵심 구성
