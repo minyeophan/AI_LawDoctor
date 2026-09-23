@@ -2,17 +2,13 @@
   <img src="./docs/readme/Rm_main.png" width="100%" alt="AI 법률닥터">
 </p>
 
-<br>
-
-## 💡 AI 법률닥터
-
 **AI 법률닥터**는 부동산 계약서를 분석하여 사용자가 놓치기 쉬운 위험 조항을 확인하고,
 관련 법적 근거와 체크포인트, 대응 가이드 및 개선 조항을 제공하는 AI 기반 계약 분석 서비스입니다.
 
 계약서 분석뿐만 아니라 AI 법률 챗봇, 커뮤니티, 마이페이지,
 법률서식 및 일정관리 기능을 함께 제공하여 계약 전 검토부터 이후 관리까지 지원합니다.
 
-## ✨ Key Features
+## ▪️Key Features
 
 <p align="center">
   <img src="./docs/readme/Rm_feature.png" width="850" alt="AI 법률닥터 주요 기능">
@@ -28,6 +24,15 @@ AI 법률 챗봇, 커뮤니티, 법률서식, 일정관리 등 계약 전후에 
 - **커뮤니티·마이페이지** — 분석 결과 공유 및 계약서·사용자 활동 관리
 - **법률서식·일정관리** — 관련 서식 조회 및 계약 후 일정 관리
 
-## 🎬 Demo
+## ▪️ Demo
 
-[▶️ AI 법률닥터 시연영상 보기](./docs/readme/Rm_demovideo.mp4)
+AI 법률닥터의 주요 기능과 실제 서비스 흐름을 시연영상에서 확인할 수 있습니다.
+
+<p align="center">
+  <a href="https://aidoc.kro.kr">
+    <b>🌐 AI 법률닥터 서비스 바로가기</b>
+  </a>
+</p>
+
+<!-- 아래 URL은 GitHub에 영상을 업로드한 뒤 생성되는 실제 영상 URL로 교체 -->
+https://github.com/user-attachments/assets/여기에-영상-ID
