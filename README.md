@@ -28,13 +28,9 @@ AI 법률 챗봇, 커뮤니티, 법률서식, 일정관리 등 계약 전후에 
 
 AI 법률닥터의 주요 기능과 실제 서비스 흐름을 시연영상에서 확인할 수 있습니다.
 
-<!-- 아래 URL은 GitHub에 영상을 업로드한 뒤 생성되는 실제 영상 URL로 교체 -->
-https://github.com/user-attachments/assets/여기에-영상-ID
+### 🌐 Service
+[AI 법률닥터 바로가기](https://aidoc.kro.kr)
 
-## ▪️ 서비스 바로가기
-## ▪️ 서비스 바로가기
+### ▶️ Demo Video
+https://github.com/user-attachments/assets/c1d62c44-b35f-4920-b976-37fd83bb593b
 
-> 👉 [AI 법률 닥터 서비스 바로가기](https://aidoc.kro.kr)
-**사이트 서버가 안열려있는 상태
-
----
