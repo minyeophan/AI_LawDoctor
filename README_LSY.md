@@ -6,45 +6,8 @@ AI 법률닥터는 관련 법령과 전문가 검토 사례를 검색하여
 전문가 검토 데이터는 다음과 같은 형태로 재구성하여
 RAG 검색 데이터로 활용했습니다.
 
-**💜1번/2번 둘중에 더 괜찮은걸로 그래프 만들어주세욤**
+![전문가검토데이터](docs/image/전문가검토데이터.png)
 
-<br>
-
-**1번**
-계약 조항
-   +
-기존 AI 의견
-   +
-전문가 검토 의견
-   ↓
-Correction / Addition
-   ↓
-전문가 검토 사례 DB
-   ↓
-RAG 검색에 활용
-
-**2번**
-[사용자 계약서 업로드]
-
-↓
-
-[텍스트 파싱 및 개인정보 마스킹]
-
-↓
-
-[Qdrant 벡터 DB: 법령/전문가 검토 사례 유사도 검색] → [유사한 전문가 교정 패턴 및 법적 근거 추출]
-
-↓
-
-(Context 주입)
-
-↓
-
-[Gemini 2.5 Flash 분석 엔진]
-
-↓
-
-[위험도 평가 및 대응 가이드 생성]
 
 
 * **Correction:** 기존 AI 분석 내용을 수정하거나 보완한 사례
@@ -57,9 +20,13 @@ Gemini 분석 Context에 반영됩니다.
 
 ## ▪️RAG 적용 결과
 
-<p align="center">
-  <img src="..." width="800">
-</p>
+| 유형                         | RAG 적용 전 | RAG 적용 후 |
+| :--------------------------- | :---------: | :---------: |
+| 원룸(반려동물)               |   33.3%     |   **66.7%** |
+| 단독주택(선순위 임대차)      |    0.0%     |    0.0%     |
+| 상가건물(업종 제한)          |    0.0%     |   **66.7%** |
+| 전체                         |   14.3%     |   **57.1%** |
+
 
 전문가 검토 의견을 기준으로 RAG 적용 전후의 분석 결과를 비교했습니다.
 
@@ -82,34 +49,49 @@ Gemini 분석 Context에 반영됩니다.
 
 ## ▪️Tech Stack
 
-**Frontend**
 
-<img width="165.447216890595" height="94" alt="react-logo" src=docs/image/react.png> <img width="209.30666666666667" height="94" alt="axios-logo" src=docs/image/axios.png> <img width="124.7680412371134" height="94" alt="figma-logo" src=docs/image/figma.png>
+### Frontend
 
-
-**backend**
-
-<img width="223.8095238095238" height="94" alt="nodejs+express-logo" src=docs/image/nodejs.png> <img width="188" height="94" alt="multer-log" src=docs/image/multer.png> <img width="94" height="94" alt="dotenv-logo" src=docs/image/dotenv.png>
+React · JavaScript · Axios
 
 
-**AI 분석**
 
-<img width="167.38795180722892" height="94" alt="gemini2.5flash" src=docs/image/gemini2.5flash.jpg> <img width="94" height="94" alt="genai-logo" src=docs/image/genai.png> <img width="379.671875" height="94" alt="jsonrepair-logo" src=docs/image/jsonrepair.png> <img width="94" height="94" alt="pytesseract-logo" src=docs/image/pytesseract.png> <img width="106.29230769230769" height="94" alt="pdfplumber-logo" src="docs/image/pdfplumber.png">
+### Backend
 
-
-**RAG**
-
-<img width="156.03458213256485" height="94" alt="mongodb-logo" src=docs/image/mongodb.jpeg> <img width="188" height="94" alt="qdrant-logo" src=docs/image/qdrant.jpeg> <img width="94" height="94" alt="fastembed-logo" src=docs/image/fastembed.png>
+Node.js · Express · MongoDB · Mongoose
 
 
-**DB**
 
-<img width="156.03458213256485" height="94" alt="mongodb-logo" src=docs/image/mongodb.jpeg> <img width="167.23582089552238" height="94" alt="mongoose-logo" src=docs/image/mongoose.png>
+### AI
+
+Python · FastAPI · Gemini 2.5 Flash · Qdrant
 
 
-**기타 도구**
 
-<img width="167.34353268428373" height="94" alt="gitandgithub-logo" src=docs/image/gitandgithub.png> <img width="124.7680412371134" height="94" width="94" alt="swagger-logo" src=docs/image/swagger.jpg> <img width="94" height="94" alt="postman-logo" src=docs/image/postman.png>
+### Infra
+
+AWS · NGINX
+
+
+
+### Collaboration
+
+Git · GitHub
+
+
+
+### Key Technologies
+
+
+
+- **Hybrid RAG** — Dense Search + BM25 + RRF
+
+- **Document Processing** — hwp5html + BeautifulSoup + OCR
+
+- **Authentication** — JWT + Google OAuth + Kakao OAuth
+
+- **External Integration** — Google Calendar API 
+
 
 <br>
 
