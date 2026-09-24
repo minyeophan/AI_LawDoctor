@@ -82,8 +82,7 @@ https://github.com/user-attachments/assets/c1d62c44-b35f-4920-b976-37fd83bb593b
 <br>
 
 
-
-### Key Technologies
+## ▪️Key Technologies
 
 
 
