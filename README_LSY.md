@@ -52,31 +52,29 @@ Gemini 분석 Context에 반영됩니다.
 
 ### Frontend
 
-React · JavaScript · Axios
-
+<img width="165.447216890595" height="94" alt="react-logo" src=docs/image/react.png> <img width="94" height="94" alt="react-logo" src=docs/image/javascript.png> <img width="209.30666666666667" height="94" alt="axios-logo" src=docs/image/axios.png>
 
 
 ### Backend
 
-Node.js · Express · MongoDB · Mongoose
-
+<img width="223.8095238095238" height="94" alt="nodejs+express-logo" src=docs/image/nodejs.png> 
+<img width="156.03458213256485" height="94" alt="mongodb-logo" src=docs/image/mongodb.jpeg> <img width="167.23582089552238" height="94" alt="mongoose-logo" src=docs/image/mongoose.png>
 
 
 ### AI
 
-Python · FastAPI · Gemini 2.5 Flash · Qdrant
-
+<img width="167.11111111111111" height="94" alt="mongoose-logo" src=docs/image/python.png> <img width="105.42056074766354" height="94" alt="react-logo" src=docs/image/fastapi.png> <img width="167.38795180722892" height="94" alt="gemini2.5flash" src=docs/image/gemini2.5flash.jpg> <img width="188" height="94" alt="qdrant-logo" src=docs/image/qdrant.jpeg>
 
 
 ### Infra
 
-AWS · NGINX
+<img width="167.11111111111111" height="94" alt="react-logo" src=docs/image/aws.jpg> <img width="163.25626740947075" height="94" alt="react-logo" src=docs/image/ngix.png>
 
 
 
 ### Collaboration
 
-Git · GitHub
+<img width="167.34353268428373" height="94" alt="gitandgithub-logo" src=docs/image/gitandgithub.png>
 
 
 
