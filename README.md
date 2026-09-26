@@ -75,7 +75,7 @@ https://github.com/user-attachments/assets/c1d62c44-b35f-4920-b976-37fd83bb593b
 
 | 한민엽 | 하승훈 | 권도연 | 이서윤 | 전지우 |
 | :-: | :-: | :-: | :-: | :-: |
-| <img src="images/한민엽.png" width="100"> | <img src="images/하승훈.png" width="100"> | <img src="images/권도연.png" width="100"> | <img src="images/이서윤.png" width="100"> | <img src="images/전지우.png" width="100"> |
+|<img src="docs/image/한민엽.jpg" width="100"> | <img src="docs/image/하승훈.png" width="100"> | <img src="docs/image/권도연.png" width="100"> | <img src="docs/image/이서윤.jpg" width="100"> | <img src="docs/image/전지우.jpg" width="100"> |
 | AI | AI | Backend | Backend | Frontend |
 
 <br>
